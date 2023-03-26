@@ -4,8 +4,8 @@ import matplotlib
 matplotlib.use('Agg')
 from torch.utils.data import DataLoader
 from Taches.VRDataset import VRDataset
-from Taches.VRDataset import update_dynamic
-from Taches.VRDataset import update_mask
+from Taches.Update_dynamic import update_dynamic
+from Taches.Update_mask import update_mask
 from Taches.Render import render
 from Taches.Recompense import reward
 from Formation.formationPrincipale import entrainment

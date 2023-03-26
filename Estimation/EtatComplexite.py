@@ -5,14 +5,10 @@ import torch.nn.functional as F
 from Model.Encodeur import Encodeur
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+"""cette classe est utilisée pour estimer la complexité d'un problème donné."""
 
 
 class StateCritic(nn.Module):
-    """Estimates the problem complexity.
-
-    This is a basic module that just looks at the log-probabilities predicted by
-    the encoder + decoder, and returns an estimate of complexity
-    """
 
     def __init__(self, static_size, dynamic_size, hidden_size):
         super(StateCritic, self).__init__()
@@ -20,7 +16,6 @@ class StateCritic(nn.Module):
         self.static_encoder = Encodeur(static_size, hidden_size)
         self.dynamic_encoder = Encodeur(dynamic_size, hidden_size)
 
-        # Define the encoder & decoder models
         self.fc1 = nn.Conv1d(hidden_size * 2, 20, kernel_size=1)
         self.fc2 = nn.Conv1d(20, 20, kernel_size=1)
         self.fc3 = nn.Conv1d(20, 1, kernel_size=1)
@@ -31,7 +26,6 @@ class StateCritic(nn.Module):
 
     def forward(self, static, dynamic):
 
-        # Use the probabilities of visiting each
         static_hidden = self.static_encoder(static)
         dynamic_hidden = self.dynamic_encoder(dynamic)
 
