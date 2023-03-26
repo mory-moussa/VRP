@@ -1,6 +1,6 @@
 # Code VRP Apprentissage par renforcement pour résoudre le problème de routagede véhicules
 
-Advertisement : Notre code est base sur implementation des 2 liens suivants et des recherhe sur chat GPT
+Advertisement : Notre code est base sur implementation des 2 liens suivants et des recherhes sur chat GPT
 
 https://github.com/mveres01/pytorch-drl4vrp
 
