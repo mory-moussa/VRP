@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 from matplotlib import pyplot as plt
 
 """trace la solution trouvée pour un problème donné. Elle prend en entrée les paramètres suivants"""

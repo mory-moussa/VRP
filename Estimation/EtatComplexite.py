@@ -8,10 +8,10 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 """cette classe est utilisée pour estimer la complexité d'un problème donné."""
 
 
-class StateCritic(nn.Module):
+class EtatCritique(nn.Module):
 
     def __init__(self, static_size, dynamic_size, hidden_size):
-        super(StateCritic, self).__init__()
+        super(EtatCritique, self).__init__()
 
         self.static_encoder = Encodeur(static_size, hidden_size)
         self.dynamic_encoder = Encodeur(dynamic_size, hidden_size)
