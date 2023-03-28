@@ -11,7 +11,7 @@ from Taches.Recompense import reward
 from Formation.formationPrincipale import entrainment
 from Taches.Validateur import validateur
 from Model.DRL4TSP import DRL4TSP
-from Estimation.EtatComplexite import StateCritic
+from Estimation.EtatComplexite import EtatCritique
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -34,33 +34,35 @@ def formation_vrp(args):
 
     donnee_entrainnement = VRDataset(args.train_size, args.num_nodes, chargeMax, MAX_DEMAND, args.seed)
 
+    print('***********Les donnees entremement*************',donnee_entrainnement)
+
     donnee_valide = VRDataset(args.valid_size, args.num_nodes, chargeMax, MAX_DEMAND, args.seed + 1)
 
-    actor = DRL4TSP(STATIC_SIZE, DYNAMIC_SIZE, args.hidden_size, update_dynamic, update_mask,
+    acteur = DRL4TSP(STATIC_SIZE, DYNAMIC_SIZE, args.hidden_size, update_dynamic, update_mask,
                     args.num_layers, args.dropout).to(device)
 
-    complexite = StateCritic(STATIC_SIZE, DYNAMIC_SIZE, args.hidden_size).to(device)
+    complexite = EtatCritique(STATIC_SIZE, DYNAMIC_SIZE, args.hidden_size).to(device)
 
-    kwargs = vars(args)
-    kwargs['train_data'] = donnee_entrainnement
-    kwargs['valid_data'] = donnee_valide
-    kwargs['reward_fn'] = reward
-    kwargs['render_fn'] = render
+    parametres = vars(args)
+    parametres['train_data'] = donnee_entrainnement
+    parametres['valid_data'] = donnee_valide
+    parametres['reward_fn'] = reward
+    parametres['render_fn'] = render
 
     if args.checkpoint:
-        path = os.path.join(args.checkpoint, 'acteur.pt')
-        actor.load_state_dict(torch.load(path, device))
+        path = os.path.join(args.checkpoint, 'actor.pt')
+        acteur.load_state_dict(torch.load(path, device))
 
-        path = os.path.join(args.checkpoint, 'complexité.pt')
+        path = os.path.join(args.checkpoint, 'critic.pt')
         complexite.load_state_dict(torch.load(path, device))
 
     if not args.test:
-        entrainment(actor, complexite, **kwargs)
+        entrainment(acteur, complexite, **parametres)
 
     test_data = VRDataset(args.valid_size, args.num_nodes, chargeMax, MAX_DEMAND, args.seed + 2)
 
     test_dir = 'test'
     test_loader = DataLoader(test_data, args.batch_size, False, num_workers=0)
-    out = validateur(test_loader, actor, reward, render, test_dir, num_plot=5)
+    out = validateur(test_loader, acteur, reward, render, test_dir, num_plot=5)
 
-    print('Average tour length: ', out)
+    print('Durée moyenne de la tournée: ', out)

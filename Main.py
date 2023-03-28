@@ -1,10 +1,5 @@
 import argparse
-import torch
 from Formation.formationVrp import formation_vrp
-
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
 
 if __name__ == '__main__':
     parseur = argparse.ArgumentParser(description='Optimisation Combinatoire')
